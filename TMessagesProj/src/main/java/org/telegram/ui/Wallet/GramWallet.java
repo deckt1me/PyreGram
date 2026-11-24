@@ -1601,7 +1601,7 @@ public class GramWallet implements GramWalletStreaming.IGramWalletStreamingSubsc
                         if (whenSent != null) whenSent.run(text); else BulletinFactory.showError(text);
                         return;
                     }
-                    pw.finishFragment();
+                    pw.finishFragment(false);
                     MessagesController.getInstance(currentAccount).processUpdates(updates, false);
                     processTransferUpdates(updates);
                     if (whenSent != null) whenSent.run(null);
