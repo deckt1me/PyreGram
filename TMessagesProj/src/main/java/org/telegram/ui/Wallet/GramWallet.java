@@ -1555,11 +1555,71 @@ public class GramWallet implements GramWalletStreaming.IGramWalletStreamingSubsc
         return () -> cancelled[0] = true;
     }
 
+    /** Internal Gram transfer to a user of this server: no seed phrase, authorized by a 2FA tmp password. */
+    private void sendInternalGram(TLRPC.User user, long amount, String comment, Utilities.Callback<String> whenSent) {
+        final BaseFragment last = LaunchActivity.getSafeLastFragment();
+        if (last == null) return;
+        final org.telegram.ui.TwoStepVerificationActivity pw = new org.telegram.ui.TwoStepVerificationActivity();
+        pw.setDelegateString("Gram");
+        pw.setDelegate(2, password -> {
+            final org.telegram.tgnet.tl.TL_account.getTmpPassword tmpReq = new org.telegram.tgnet.tl.TL_account.getTmpPassword();
+            tmpReq.password = password;
+            tmpReq.period = 60;
+            getConnectionsManager().sendRequest(tmpReq, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
+                if (!(response instanceof org.telegram.tgnet.tl.TL_account.tmpPassword)) {
+                    pw.needHideProgress();
+                    final String text = error != null && error.text != null ? error.text : "NULL_ERROR";
+                    err("internal transfer: tmp password: " + text);
+                    if (whenSent != null) whenSent.run(text); else BulletinFactory.showError(text);
+                    return;
+                }
+                final byte[] tmp = ((org.telegram.tgnet.tl.TL_account.tmpPassword) response).tmp_password;
+                final long randomId = Utilities.random.nextLong() | 1L;
+                final TL_wallet.sendTransfer transfer = new TL_wallet.sendTransfer();
+                try {
+                    final org.json.JSONObject body = new org.json.JSONObject();
+                    body.put("version", 1);
+                    body.put("recipient_user_id", user.id);
+                    body.put("random_id", randomId);
+                    body.put("amount_nanoton", amount);
+                    if (!TextUtils.isEmpty(comment)) body.put("comment", comment);
+                    body.put("tmp_password", android.util.Base64.encodeToString(tmp, android.util.Base64.NO_WRAP));
+                    transfer.data_normal = body.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8);
+                } catch (Exception e) {
+                    pw.needHideProgress();
+                    err("internal transfer: bad envelope", e);
+                    if (whenSent != null) whenSent.run("ENVELOPE_ERROR"); else BulletinFactory.showError("ENVELOPE_ERROR");
+                    return;
+                }
+                transfer.user_id = MessagesController.getInstance(currentAccount).getInputUser(user);
+                transfer.random_id = randomId;
+                getConnectionsManager().sendRequestTyped(transfer, AndroidUtilities::runOnUIThread, (updates, err2) -> {
+                    pw.needHideProgress();
+                    if (err2 != null || updates == null) {
+                        final String text = err2 != null && err2.text != null ? err2.text : "NULL_ERROR";
+                        err("internal transfer: sendTransfer: " + text);
+                        if (whenSent != null) whenSent.run(text); else BulletinFactory.showError(text);
+                        return;
+                    }
+                    pw.finishFragment();
+                    MessagesController.getInstance(currentAccount).processUpdates(updates, false);
+                    processTransferUpdates(updates);
+                    if (whenSent != null) whenSent.run(null);
+                });
+            }));
+        });
+        pw.preload(() -> last.presentFragment(pw));
+    }
+
     private void send(TLRPC.User user, String address, long amount, String comment, byte[] comment_recipient_public_key,
                       TL_wallet.nftItem collectible, String domain, Utilities.Callback<String> whenSent,
                       Utilities.Callback<TL_wallet.walletTransaction> whenQueued, GramWalletTonConnect.Transaction raw) {
         final String sourceAddress = getAddress();
         log("send to " + address + ", amount " + amount + ", when ready...");
+        if (user != null && collectible == null && raw == null && user.id != UserConfig.getInstance(currentAccount).getClientUserId()) {
+            sendInternalGram(user, amount, comment, whenSent);
+            return;
+        }
         whenReady(() -> {
             final Runnable runnable = () -> {
                 log("send " + address + ": ready, get secret phrase");
