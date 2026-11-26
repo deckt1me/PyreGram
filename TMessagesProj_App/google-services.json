@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "104376972792",
-    "project_id": "learned-vortex-483708-r4",
-    "storage_bucket": "learned-vortex-483708-r4.firebasestorage.app"
+    "project_number": "320900488262",
+    "project_id": "pyregram-ed6ae",
+    "storage_bucket": "pyregram-ed6ae.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:104376972792:android:c2081e5119281d757bd20d",
+        "mobilesdk_app_id": "1:320900488262:android:ed0a7ee4c6e95a65cc3e47",
         "android_client_info": {
-          "package_name": "org.cubgram.messanger"
+          "package_name": "org.pyregram.messenger"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBE88kqgiph45Baf02XGfeROEC24WglgXM"
+          "current_key": "AIzaSyAIy1zb3cur-BfztkGLHy8QUwgcAnyHjUI"
         }
       ],
       "services": {
