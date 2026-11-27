@@ -365,24 +365,24 @@ void Handshake::processHandshakeResponse_resPQ(TLObject *message, int64_t messag
             if (serverPublicKeys.empty()) {
                 if (ConnectionsManager::getInstance(currentDatacenter->instanceNum).testBackend) {
                     serverPublicKeys.emplace_back("-----BEGIN RSA PUBLIC KEY-----\n"
-"MIIBCgKCAQEAtV1cJtNOk8I1h05onEt7UaxSxo8UGiOW8eztR5/9Fva1Z1vUSBXG\n"
-"yfE3wKnRdmFS+dLX4VpN4NTvbng3Gh9LwXBSvSuNK8+eaGVAAB//fN++iLcz5A5k\n"
-"1QC/KL8E9n8EYPd9cfwQ9bMLsnmQ8BRxJZRI91DqE623OxJK1gsqwND/QzmORubK\n"
-"oyQUZCdLttWhOX1iMW3zuaYxibpw4x9zp/ZiGcGngnoF7qxCKPpaGxqQtuRIUCML\n"
-"/hShOoMlDmt+ObVFvokA5TlRgtwSgSt3qb7OsMfJ6wQUqgCkMOcEiuG4za+t0uR4\n"
-"6P3jYwr5Bj3N7XrI91eolgCGBiu5NQRqHwIDAQAB\n"
+"MIIBCgKCAQEAxF//0M0+/5PzgdNagTX+J+dJgr75ZCTuiG8i4x7YwmJF+jiOGCjm\n"
+"7X7BLCaMc1+hOZYDL3+Gvle/AKykW1qouaCJMVx/H+2l8LFXLelZ2PLawTb8A7Bl\n"
+"TqWzL3db5BugMNWziL9TuhR8In1bwKY07QVpR9in5zjAsAGLBk+mGt0DnVyMf1Xo\n"
+"p2lLCFNmm0F4ykcAeaLCCIPbGWddliLY8xEEhI4GO2l1U3kZMwIOdOnAGJFtgUAo\n"
+"Te+FHR6F1s9adCVZB1teL/hf9R+WmekJwygVz0MYEH7y6U49T45+/W7OF6X6g0W0\n"
+"j1uSSrsY4qN7twxbTad9zdGZ7ys+9v+PuQIDAQAB\n"
 "-----END RSA PUBLIC KEY-----");
-                    serverPublicKeysFingerprints.push_back(0x0563dc011cd8d510);
+                    serverPublicKeysFingerprints.push_back(0x9dbe5a4c45febeff);
                 } else {
                     serverPublicKeys.emplace_back("-----BEGIN RSA PUBLIC KEY-----\n"
-"MIIBCgKCAQEAtV1cJtNOk8I1h05onEt7UaxSxo8UGiOW8eztR5/9Fva1Z1vUSBXG\n"
-"yfE3wKnRdmFS+dLX4VpN4NTvbng3Gh9LwXBSvSuNK8+eaGVAAB//fN++iLcz5A5k\n"
-"1QC/KL8E9n8EYPd9cfwQ9bMLsnmQ8BRxJZRI91DqE623OxJK1gsqwND/QzmORubK\n"
-"oyQUZCdLttWhOX1iMW3zuaYxibpw4x9zp/ZiGcGngnoF7qxCKPpaGxqQtuRIUCML\n"
-"/hShOoMlDmt+ObVFvokA5TlRgtwSgSt3qb7OsMfJ6wQUqgCkMOcEiuG4za+t0uR4\n"
-"6P3jYwr5Bj3N7XrI91eolgCGBiu5NQRqHwIDAQAB\n"
+"MIIBCgKCAQEAxF//0M0+/5PzgdNagTX+J+dJgr75ZCTuiG8i4x7YwmJF+jiOGCjm\n"
+"7X7BLCaMc1+hOZYDL3+Gvle/AKykW1qouaCJMVx/H+2l8LFXLelZ2PLawTb8A7Bl\n"
+"TqWzL3db5BugMNWziL9TuhR8In1bwKY07QVpR9in5zjAsAGLBk+mGt0DnVyMf1Xo\n"
+"p2lLCFNmm0F4ykcAeaLCCIPbGWddliLY8xEEhI4GO2l1U3kZMwIOdOnAGJFtgUAo\n"
+"Te+FHR6F1s9adCVZB1teL/hf9R+WmekJwygVz0MYEH7y6U49T45+/W7OF6X6g0W0\n"
+"j1uSSrsY4qN7twxbTad9zdGZ7ys+9v+PuQIDAQAB\n"
 "-----END RSA PUBLIC KEY-----");
-                    serverPublicKeysFingerprints.push_back(0x0563dc011cd8d510);
+                    serverPublicKeysFingerprints.push_back(0x9dbe5a4c45febeff);
                 }
             }
 
